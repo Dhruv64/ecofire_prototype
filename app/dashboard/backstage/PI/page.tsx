@@ -1,36 +1,36 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MappingJP, columns, convertJPMappingToTableData } from "@/components/pi-job-mapping/table/columns";
-import { MappingJPTable } from "@/components/pi-job-mapping/table/pi-job-mapping-table";
-import { MappingDialog } from "@/components/pi-job-mapping/pi-job-mapping-dialog";
+import { PI, columns, convertPIsToTableData } from "@/components/PIS/table/columns";
+import { PISTable } from "@/components/PIS/table/PI-table";
+import { PIDialog } from "@/components/PIS/PI-dialog";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-export default function PiJobMappingPage() {
-  const [data, setData] = useState<MappingJP[]>([]);
+export default function PIsPage() {
+  const [data, setData] = useState<PI[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingPI, setEditingPI] = useState<MappingJP | undefined>(undefined);
+  const [editingPI, setEditingPI] = useState<PI | undefined>(undefined);
   const { toast } = useToast();
 
   const fetchPIs = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/pi-job-mappings');
+      const response = await fetch('/api/PIS');
       const result = await response.json();
       
       if (result.success) {
-        const tableData = convertJPMappingToTableData(result.data);
+        const tableData = convertPIsToTableData(result.data);
         setData(tableData);
       } else {
         setError(result.error);
       }
     } catch (err) {
-      setError('Failed to fetch Mapping');
-      console.error('Error fetching Mapping:', err);
+      setError('Failed to fetch PIs');
+      console.error('Error fetching PIs:', err);
     } finally {
       setLoading(false);
     }
@@ -40,9 +40,9 @@ export default function PiJobMappingPage() {
     fetchPIs();
   }, []);
 
-  const handleCreate = async (PIData: Partial<MappingJP>) => {
+  const handleCreate = async (PIData: Partial<PI>) => {
     try {
-      const response = await fetch('/api/pi-job-mappings', {
+      const response = await fetch('/api/PIS', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export default function PiJobMappingPage() {
       if (result.success) {
         toast({
           title: "Success",
-          description: "Mapping created successfully",
+          description: "PI created successfully",
         });
         fetchPIs();
         setDialogOpen(false);
@@ -65,22 +65,22 @@ export default function PiJobMappingPage() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to create Mapping",
+        description: "Failed to create PI",
         variant: "destructive",
       });
     }
   };
 
-  const handleEdit = async (MappingData: Partial<MappingJP>) => {
+  const handleEdit = async (PIData: Partial<PI>) => {
     if (!editingPI) return;
 
     try {
-      const response = await fetch(`/api/pi-job-mappings/${editingPI.id}`, {
+      const response = await fetch(`/api/PIS/${editingPI.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(MappingData),
+        body: JSON.stringify(PIData),
       });
 
       const result = await response.json();
@@ -88,7 +88,7 @@ export default function PiJobMappingPage() {
       if (result.success) {
         toast({
           title: "Success",
-          description: "Mapping updated successfully",
+          description: "PI updated successfully",
         });
         fetchPIs();
       } else {
@@ -97,7 +97,7 @@ export default function PiJobMappingPage() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to update Mapping",
+        description: "Failed to update PI",
         variant: "destructive",
       });
     }
@@ -105,7 +105,7 @@ export default function PiJobMappingPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`/api/pi-job-mappings/${id}`, {
+      const response = await fetch(`/api/PIS/${id}`, {
         method: 'DELETE',
       });
 
@@ -114,7 +114,7 @@ export default function PiJobMappingPage() {
       if (result.success) {
         toast({
           title: "Success",
-          description: "Mapping deleted successfully",
+          description: "PI deleted successfully",
         });
         fetchPIs();
       } else {
@@ -123,14 +123,14 @@ export default function PiJobMappingPage() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to delete Mapping",
+        description: "Failed to delete PI",
         variant: "destructive",
       });
     }
   };
 
-  const handleOpenEdit = (MJP: MappingJP) => {
-    setEditingPI(MJP);
+  const handleOpenEdit = (PIs: PI) => {
+    setEditingPI(PIs);
     
     setDialogOpen(true);
   };
@@ -143,7 +143,7 @@ export default function PiJobMappingPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Loading Mapping between Jobs and PI...</div>
+        <div className="text-lg">Loading PIs...</div>
       </div>
     );
   }
@@ -160,18 +160,18 @@ export default function PiJobMappingPage() {
     <div className="p-4">
       <div className="container mx-auto py-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Mapping Job and PI</h1>
+          <h1 className="text-2xl font-bold">PIs</h1>
           <Button onClick={handleOpenCreate} className="bg-blue-500 hover:bg-blue-600">
-            <Plus className="mr-2 h-4 w-4"/>Add Mapping
+            <Plus className="mr-2 h-4 w-4" /> Add PI
           </Button>
         </div>
         
-        <MappingJPTable 
+        <PISTable 
           columns={columns(handleOpenEdit, handleDelete)} 
           data={data} 
         />
 
-        <MappingDialog
+        <PIDialog
           mode={editingPI ? 'edit' : 'create'}
           open={dialogOpen}
           onOpenChange={setDialogOpen}
