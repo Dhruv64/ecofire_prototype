@@ -37,7 +37,7 @@ const items = [
   },
   {
     title: "Team",
-    url: "#",
+    url: "/dashboard/owners",
     icon: Users,
   },
   {
