@@ -67,6 +67,7 @@ export function TasksSidebar({
           focusLevel: task.focusLevel,
           joyLevel: task.joyLevel,
           notes: task.notes,
+          tags: task.tags || [],
           jobId: task.jobId,
           completed: task.completed,
         }));
@@ -192,6 +193,7 @@ export function TasksSidebar({
             focusLevel: result.data.focusLevel,
             joyLevel: result.data.joyLevel,
             notes: result.data.notes,
+            tags: result.data.tags || [],
             jobId: result.data.jobId,
             completed: result.data.completed,
           };
@@ -233,6 +235,7 @@ export function TasksSidebar({
             focusLevel: result.data.focusLevel,
             joyLevel: result.data.joyLevel,
             notes: result.data.notes,
+            tags: result.data.tags || [],
             jobId: result.data.jobId,
             completed: result.data.completed,
           };

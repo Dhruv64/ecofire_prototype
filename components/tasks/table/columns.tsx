@@ -136,6 +136,48 @@ export const columns = (
     },
   },
   {
+    accessorKey: "tags",
+    header: "Tags",
+    cell: ({ row }) => {
+      const tags = row.getValue("tags") as string[] | undefined;
+      
+      if (!tags || tags.length === 0) return "No tags";
+      
+      // Function to generate a consistent color for a tag
+      const getTagColor = (tag: string) => {
+        // Generate a hash code from the tag string
+        const hashCode = tag.split('').reduce((acc, char) => {
+          return char.charCodeAt(0) + ((acc << 5) - acc);
+        }, 0);
+        
+        // Map to HSL color space for better distribution of colors
+        // Use higher saturation and limited lightness range for better readability
+        const h = Math.abs(hashCode % 360);
+        const s = 65 + (hashCode % 20); // 65-85% saturation
+        const l = 55 + (hashCode % 15); // 55-70% lightness - not too dark, not too light
+        
+        return `hsl(${h}, ${s}%, ${l}%)`;
+      };
+      
+      return (
+        <div className="flex flex-wrap gap-1 max-w-[200px]">
+          {tags.map((tag, index) => (
+            <span
+              key={`${tag}-${index}`}
+              className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium text-white shadow-sm"
+              style={{ 
+                backgroundColor: getTagColor(tag),
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      );
+    },
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const task = row.original;

@@ -21,6 +21,7 @@ export interface Task extends mongoose.Document {
   focusLevel?: FocusLevel;
   joyLevel?: JoyLevel;
   notes?: string;
+  tags?: string[];
   jobId: string;
   userId: string;
   completed: boolean;
@@ -55,6 +56,11 @@ const TaskSchema = new mongoose.Schema<Task>({
   },
   notes: {
     type: String,
+    required: false,
+  },
+  tags: {
+    type: [String],
+    default: [],
     required: false,
   },
   jobId: {

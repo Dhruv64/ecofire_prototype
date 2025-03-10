@@ -21,4 +21,5 @@ export enum FocusLevel {
     notes?: string;
     jobId: string;
     completed: boolean;
+    tags?: string[];
   };

@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Task, FocusLevel, JoyLevel } from "./types";
+import { TagInput } from "@/components/tasks/tag-input";
 
 interface TaskDialogProps {
   mode: "create" | "edit";
@@ -44,11 +45,16 @@ export function TaskDialog({
   const [title, setTitle] = useState("");
   const [owner, setOwner] = useState<string | undefined>(undefined);
   const [date, setDate] = useState<string | undefined>(undefined);
-  const [requiredHours, setRequiredHours] = useState<number | undefined>(undefined);
-  const [focusLevel, setFocusLevel] = useState<FocusLevel | undefined>(undefined);
+  const [requiredHours, setRequiredHours] = useState<number | undefined>(
+    undefined
+  );
+  const [focusLevel, setFocusLevel] = useState<FocusLevel | undefined>(
+    undefined
+  );
   const [joyLevel, setJoyLevel] = useState<JoyLevel | undefined>(undefined);
   const [notes, setNotes] = useState<string | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
 
   // Initialize the form when the dialog opens or the initial data changes
   useEffect(() => {
@@ -61,29 +67,31 @@ export function TaskDialog({
       setFocusLevel(undefined);
       setJoyLevel(undefined);
       setNotes(undefined);
+      setTags([]); // Reset tags
     } else if (initialData) {
       // Set data for edit mode
       setTitle(initialData.title);
       setOwner(initialData.owner);
-      
+
       // Format date for input field
       if (initialData.date) {
         setDate(new Date(initialData.date).toISOString().split("T")[0]);
       } else {
         setDate(undefined);
       }
-      
+
       setRequiredHours(initialData.requiredHours);
       setFocusLevel(initialData.focusLevel);
       setJoyLevel(initialData.joyLevel);
       setNotes(initialData.notes);
+      setTags(initialData.tags || []); // Load tags
     }
   }, [mode, initialData, open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Build task object from form fields
       const task: Partial<Task> = {
@@ -98,10 +106,11 @@ export function TaskDialog({
       if (focusLevel) task.focusLevel = focusLevel;
       if (joyLevel) task.joyLevel = joyLevel;
       if (notes) task.notes = notes;
+      if (tags.length > 0) task.tags = tags;
 
       await onSubmit(task);
       onOpenChange(false);
-      
+
       // Reset form if creating new task
       if (mode === "create") {
         setTitle("");
@@ -111,6 +120,7 @@ export function TaskDialog({
         setFocusLevel(undefined);
         setJoyLevel(undefined);
         setNotes(undefined);
+        setTags([]); // Reset tags
       }
     } catch (error) {
       console.error("Error submitting task:", error);
@@ -152,7 +162,9 @@ export function TaskDialog({
               <div className="col-span-3">
                 <Select
                   value={owner || "none"}
-                  onValueChange={(value) => setOwner(value === "none" ? undefined : value)}
+                  onValueChange={(value) =>
+                    setOwner(value === "none" ? undefined : value)
+                  }
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select an owner" />
@@ -196,7 +208,9 @@ export function TaskDialog({
                 value={requiredHours === undefined ? "" : requiredHours}
                 onChange={(e) => {
                   const value = e.target.value;
-                  setRequiredHours(value === "" ? undefined : parseFloat(value));
+                  setRequiredHours(
+                    value === "" ? undefined : parseFloat(value)
+                  );
                 }}
                 className="col-span-3"
               />
@@ -223,9 +237,15 @@ export function TaskDialog({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">None</SelectItem>
-                    <SelectItem value={FocusLevel.High}>{FocusLevel.High}</SelectItem>
-                    <SelectItem value={FocusLevel.Medium}>{FocusLevel.Medium}</SelectItem>
-                    <SelectItem value={FocusLevel.Low}>{FocusLevel.Low}</SelectItem>
+                    <SelectItem value={FocusLevel.High}>
+                      {FocusLevel.High}
+                    </SelectItem>
+                    <SelectItem value={FocusLevel.Medium}>
+                      {FocusLevel.Medium}
+                    </SelectItem>
+                    <SelectItem value={FocusLevel.Low}>
+                      {FocusLevel.Low}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -252,11 +272,31 @@ export function TaskDialog({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">None</SelectItem>
-                    <SelectItem value={JoyLevel.High}>{JoyLevel.High}</SelectItem>
-                    <SelectItem value={JoyLevel.Medium}>{JoyLevel.Medium}</SelectItem>
+                    <SelectItem value={JoyLevel.High}>
+                      {JoyLevel.High}
+                    </SelectItem>
+                    <SelectItem value={JoyLevel.Medium}>
+                      {JoyLevel.Medium}
+                    </SelectItem>
                     <SelectItem value={JoyLevel.Low}>{JoyLevel.Low}</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-4 items-start gap-4">
+              <Label htmlFor="tags" className="text-right">
+                Tags
+              </Label>
+              <div className="col-span-3">
+                <TagInput
+                  value={tags}
+                  onChange={setTags}
+                  placeholder="Add tags (press Enter after each tag)"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Press Enter or comma after each tag, or click Add
+                </p>
               </div>
             </div>
 
