@@ -16,7 +16,7 @@ import {
 
 // Import the database model types
 import { PIQBOMapping } from "@/lib/models/pi-qbo-mapping.model";
-import { PIs } from "@/lib/models/PI.model";
+import { PIs } from "@/lib/models/pi.model";
 import { QBOs } from "@/lib/models/qbo.model";
 
 // Table-specific type that converts from the database model

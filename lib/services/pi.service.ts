@@ -1,6 +1,6 @@
 // lib/services/pi.service.ts
-import PI from '../models/PI.model';
-import { PIs } from '../models/PI.model';
+import PI from '../models/pi.model';
+import { PIs } from '../models/pi.model';
 import dbConnect from '../mongodb';
 
 export class PIService {

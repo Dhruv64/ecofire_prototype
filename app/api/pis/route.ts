@@ -2,7 +2,7 @@
 // description: Get all PIs
 
 import { NextResponse } from 'next/server';
-import { PIService } from '@/lib/services/PI.service';
+import { PIService } from '@/lib/services/pi.service';
 import { auth } from '@clerk/nextjs/server';
 
 const PIsService = new PIService();

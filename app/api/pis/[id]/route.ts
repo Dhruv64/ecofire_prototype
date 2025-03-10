@@ -1,7 +1,7 @@
 // route: /api/PIS/:id
 // description: Get PI by id
 import { NextResponse } from 'next/server';
-import { PIService } from '@/lib/services/PI.service';
+import { PIService } from '@/lib/services/pi.service';
 import { auth } from '@clerk/nextjs/server';
 
 const piService = new PIService();

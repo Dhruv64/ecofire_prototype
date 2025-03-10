@@ -20,7 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState, useEffect } from "react";
 import { PIQBOMapping } from "@/lib/models/pi-qbo-mapping.model";
 import { QBOs } from "@/lib/models/qbo.model";
-import { PIs } from "@/lib/models/PI.model";
+import { PIs } from "@/lib/models/pi.model";
 
 export type MappingFormData = {
   id?: string;

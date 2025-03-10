@@ -7,7 +7,7 @@ import { columns, MappingTableData, convertMappingsToTableData } from "@/compone
 import { PIQBOMappingTable } from "@/components/pi-qbo-mapping/table/pi-qbo-mapping-table";
 import { useToast } from "@/hooks/use-toast";
 import { PIQBOMapping } from "@/lib/models/pi-qbo-mapping.model";
-import { PIs } from "@/lib/models/PI.model";
+import { PIs } from "@/lib/models/pi.model";
 import { QBOs } from "@/lib/models/qbo.model";
 import { useUser } from "@clerk/nextjs";
 import { Plus } from "lucide-react";

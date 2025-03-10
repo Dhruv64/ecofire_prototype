@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 // Import the database model type
-import { PIs } from "@/lib/models/PI.model";
+import { PIs } from "@/lib/models/pi.model";
 
 // Table-specific type that converts from the database model
 export type PI = {
