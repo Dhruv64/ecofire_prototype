@@ -16,7 +16,7 @@ import {
 
 // Import the database model types
 import { PIQBOMapping } from "@/lib/models/pi-qbo-mapping.model";
-import { PIs } from "@/lib/models/pi.model";
+import { PIs } from "@/lib/models/PI.model";
 import { QBOs } from "@/lib/models/qbo.model";
 
 // Table-specific type that converts from the database model
@@ -97,8 +97,14 @@ export const columns = (
     header: "Notes",
     cell: ({ row }) => {
       const notes = row.getValue("notes") as string | undefined;
-      return notes || "";
-    }
+      if (!notes) return "No notes";
+      // Truncate long notes and add ellipsis
+      return (
+        <div className="max-h-[100px] min-h-[60px] w-[300px] overflow-y-auto rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm break-words whitespace-normal">
+          {notes}
+        </div>
+      );
+    },
   },
   {
     id: "actions",

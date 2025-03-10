@@ -1,6 +1,6 @@
 // lib/services/pi.service.ts
-import MappingJobToPI from '../models/pi-job-mapping.model';
-import { JobPiMapping } from '../models/pi-job-mapping.model';
+import MappingJobToPI from '../models/PI-Job-Mapping.model';
+import { JobPiMapping } from '../models/PI-Job-Mapping.model';
 import dbConnect from '../mongodb';
 
 export class MappingService {
