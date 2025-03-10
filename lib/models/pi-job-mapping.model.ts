@@ -7,6 +7,7 @@ export interface JobPiMapping extends mongoose.Document {
   piId: string;
   jobName: string;
   piName: string;
+  piTarget: number;
   piImpactValue: number;
   notes?: string;
   userId: string;
@@ -37,6 +38,11 @@ const MappingJobToPISchema = new mongoose.Schema<JobPiMapping>({
     type: String,
     required: true,
     },
+    piTarget: {
+      type: Number,
+      required: [true, "Please provide a PI target value."],
+      default: 0
+    },
   piImpactValue: {
     type: Number,
     required: [true, "Please provide a current value."],
@@ -48,4 +54,4 @@ const MappingJobToPISchema = new mongoose.Schema<JobPiMapping>({
   }
 });
 
-export default mongoose.models.MappingJobToPI || mongoose.model<JobPiMapping>("MappingJobToPI", MappingJobToPISchema);
+export default mongoose.models.JobPiMapping || mongoose.model<JobPiMapping>("MappingJobToPI", MappingJobToPISchema);
